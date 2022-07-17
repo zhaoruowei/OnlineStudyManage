@@ -1,0 +1,43 @@
+<!--@Author: Ruowei Zhao-->
+<!--@Student number: 210464838-->
+<!--@Email: r.zhao@se21.qmul.ac.uk-->
+<!--@Project: OnlineStudyManage-->
+<!--@File: reset.py-->
+<!--@Time: 2022/7/170:33-->
+<!--@Software: PyCharm-->
+
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+    重置密码
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="text-bg-dark p-2 bg-dark border">
+            重置密码
+        </div>
+        <div class="p-2 border">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
+                    {% if field.label != "用户名" %}
+                        <div class="form-floating mb-3">
+                            {{ field }}
+                            <label for="floatingInput">{{ field.label }}</label>
+                            <span style="color: red">{{ field.errors.0 }}</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-dark me-md-2" type="submit">提 交</button>
+                    <a href="/">
+                        <button class="btn btn-dark" type="button">返 回</button>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

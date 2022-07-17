@@ -1,0 +1,68 @@
+<!--@Author: Ruowei Zhao-->
+<!--@Student number: 210464838-->
+<!--@Email: r.zhao@se21.qmul.ac.uk-->
+<!--@Project: OnlineStudyManage-->
+<!--@File: student_add.py-->
+<!--@Time: 2022/7/176:52-->
+<!--@Software: PyCharm-->
+
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+    添加学生
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="text-bg-dark p-2 bg-dark border">
+            添加学生
+        </div>
+        <div class="p-2 border">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-floating mb-3">
+                        {{ field }}
+                        <label for="floatingInput">{{ field.label }}</label>
+                        <span style="color: red">{{ field.errors.0 }}</span>
+                    </div>
+                {% endfor %}
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-dark me-md-2" type="submit">创 建</button>
+                    <a href="/">
+                        <button class="btn btn-dark" type="button">返 回</button>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    {#时间选择控件#}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/datepicker-full.min.js"></script>
+    <script>
+        const getDatePickerTitle = elem => {
+            // From the label or the aria-label
+            const label = elem.nextElementSibling;
+            let titleText = '';
+            if (label && label.tagName === 'LABEL') {
+                titleText = label.textContent;
+            } else {
+                titleText = elem.getAttribute('aria-label') || '';
+            }
+            return titleText;
+        }
+
+        const elems = document.querySelectorAll('.datepicker_input');
+        for (const elem of elems) {
+            const datepicker = new Datepicker(elem, {
+                'format': 'yyyy/mm/dd', // UK format
+                title: getDatePickerTitle(elem)
+            });
+        }
+    </script>
+{% endblock %}

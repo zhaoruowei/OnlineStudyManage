@@ -1,0 +1,17 @@
+<!--@Author: Ruowei Zhao-->
+<!--@Student number: 210464838-->
+<!--@Email: r.zhao@se21.qmul.ac.uk-->
+<!--@Project: OnlineStudyManage-->
+<!--@File: index.py-->
+<!--@Time: 2022/6/2123:53-->
+<!--@Software: PyCharm-->
+
+{% extends 'layout.html' %}
+
+{% block title %}
+    首 页
+{% endblock %}
+
+{% block content %}
+    <h1>用户 {{ request.session.userinfo.name }} 欢迎回来！</h1>
+{% endblock %}

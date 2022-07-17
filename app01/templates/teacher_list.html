@@ -1,0 +1,151 @@
+<!--@Author: Ruowei Zhao-->
+<!--@Student number: 210464838-->
+<!--@Email: r.zhao@se21.qmul.ac.uk-->
+<!--@Project: OnlineStudyManage-->
+<!--@File: teacher_list.py-->
+<!--@Time: 2022/6/2122:56-->
+<!--@Software: PyCharm-->
+
+{% extends 'layout.html' %}
+
+{% block title %}
+    教师管理
+{% endblock %}
+
+{% block content %}
+    {# 页面容器 #}
+    <div class="container">
+        {# 新建按钮 #}
+        <div>
+            <a class="btn btn-primary" href="/teacher/add/">
+                新建教师
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                </svg>
+            </a>
+        </div>
+        {# 表格 #}
+        <div>
+            <table class="table table-bordered caption-top" style="margin-top: 10px">
+                {# 表标题 #}
+                <caption class="caption-top bg-dark table-dark">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-file-person" viewBox="0 0 16 16" style="margin-left: 5px">
+                        <path d="M12 1a1 1 0 0 1 1 1v10.755S12 11 8 11s-5 1.755-5 1.755V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z"/>
+                        <path d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </svg>
+                    <span> 教师列表</span>
+                </caption>
+                {# 表头 #}
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">用户名</th>
+                    <th scope="col">姓名</th>
+                    <th scope="col">性别</th>
+                    <th scope="col">邮箱</th>
+                    <th scope="col">电话</th>
+                    <th scope="col">薪水</th>
+                    <th scope="col">科目</th>
+                    <th scope="col">班级</th>
+                    <th scope="col">入职时间</th>
+                    <th scope="col">离职时间</th>
+                    <th scope="col">操作</th>
+                </tr>
+                </thead>
+                {# 表内容 #}
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <th scope="row">{{ obj.id }}</th>
+                        <td>{{ obj.username.username }}</td>
+                        <td>{{ obj.name }}</td>
+                        <td>{{ obj.get_gender_display }}</td>
+                        <td>{{ obj.email }}</td>
+                        <td>{{ obj.phone }}</td>
+                        <td>{{ obj.salary }}</td>
+                        <td>{{ obj.classes.get_class_type_display }}</td>
+                        <td>{{ obj.classes.class_id }}</td>
+                        <td>{{ obj.join_time }}</td>
+                        <td>{{ obj.leave_time }}</td>
+                        <td>
+                            <a type="button" class="btn btn-success btn-sm btn-edit" href="/teacher/edit/{{ obj.id }}">编辑</a>
+                            <input type="button" class="btn btn-warning btn-sm btn-delete" value="删除"
+                                   uname={{ obj.username.username }}>
+                            <a type="button" class="btn btn-danger btn-sm btn-reset"
+                               href="/user/reset/{{ obj.username.username }}">重置密码</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {# 删除警告框 #}
+    <div class="modal" id="deletemodal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">是否删除数据</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>数据删除后将不可恢复.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="btnConfirmDelete">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# 分页导航栏 #}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {{ page_html }}
+        </ul>
+    </nav>
+
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        var UNAME;
+        $(function () {
+            bindBtnDeleteEvent();
+            bindBtnConfirmDelete();
+        })
+
+        function bindBtnDeleteEvent() {
+            $(".btn-delete").click(function () {
+                $("#deletemodal").modal('show');
+                // 点击编辑按钮,拼接url,发送get请求
+                UNAME = $(this).attr("uname");
+            })
+        }
+
+        function bindBtnConfirmDelete() {
+            $("#btnConfirmDelete").click(function () {
+                $("#deletemodal").modal('hide');
+                $.ajax({
+                    url: "/teacher/delete/",
+                    type: "GET",
+                    data: {
+                        user_name: UNAME,
+                    },
+                    dataType: "JSON",
+                    success: function (res) {
+                        if (res) {
+                            location.reload();
+                        }
+                    }
+                })
+            })
+
+        }
+    </script>
+{% endblock %}

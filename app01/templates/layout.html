@@ -1,0 +1,128 @@
+<!--@Author: Ruowei Zhao-->
+<!--@Student number: 210464838-->
+<!--@Email: r.zhao@se21.qmul.ac.uk-->
+<!--@Project: OnlineStudyManage-->
+<!--@File: layout.py-->
+<!--@Time: 2022/6/2123:10-->
+<!--@Software: PyCharm-->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap@5.2.0-beta1.min.css' %}">
+    {% block css %}{% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <div style="margin-left: 80px">
+            <a class="navbar-brand" href="/">
+                <img src="{% static 'img/logo.png' %}" alt="" width="30" height="30"
+                     class="d-inline-block align-text-top">
+                教学管理平台
+            </a>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/announcement/add/">发布公告</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/teacher/list/">教师管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/student/list/">学生管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/class/list/">课程管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/order/list/">订单管理</a>
+                </li>
+            </ul>
+            <div>
+                <form class="d-flex" role="search" id="Search">
+                    <input class="form-control me-2" type="search" placeholder="搜索..." aria-label="Search">
+                </form>
+            </div>
+            <div style="margin-right: 30px">
+                <button type="button" id="btnSearch" class="btn btn-outline-success">搜 索</button>
+            </div>
+            <div style="margin-right: 80px">
+                {% if not request.session.userinfo.name %}
+                    <div class="text-end" id="logdrop">
+                        <button type="button" id="btnSignin" class="btn btn-outline-light me-2">登 录</button>
+                        <button type="button" id="btnSignup" class="btn btn-warning">注 册</button>
+                    </div>
+                {% else %}
+                    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink"
+                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32"
+                                         class="rounded-circle">
+                                    <span id="infodrop_span">{{ request.session.userinfo.name }}</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark"
+                                    aria-labelledby="navbarDarkDropdownMenuLink">
+                                    <li><a class="dropdown-item"
+                                           href="/user/profile/?user_name={{ request.session.userinfo.name }}">我的资料</a>
+                                    </li>
+                                    <li><a class="dropdown-item"
+                                           href="/user/class/?user_name={{ request.session.userinfo.name }}">我的课程</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="/signout/">注 销</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div style="margin-top: 20px">
+    {% block content %}{% endblock %}
+</div>
+
+
+<script src="{% static 'js/bootstrap@5.2.0-beta1.bundle.min.js' %}"></script>
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script type="text/javascript">
+    $(function () {
+        bindBtnSigninEvent();
+        bindBtnSignupEvent();
+    })
+
+    function bindBtnSigninEvent() {
+        $("#btnSignin").click(function () {
+            // 点击登录按钮跳转
+            window.location.href = "/signin/";
+        })
+    }
+
+    function bindBtnSignupEvent() {
+        $("#btnSignup").click(function () {
+            // 点击登录按钮跳转
+            window.location.href = "/signup/";
+        })
+    }
+</script>
+{% block js %}{% endblock %}
+</body>
+</html>

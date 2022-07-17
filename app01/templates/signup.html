@@ -1,0 +1,69 @@
+<!--@Author: Ruowei Zhao-->
+<!--@Student number: 210464838-->
+<!--@Email: r.zhao@se21.qmul.ac.uk-->
+<!--@Project: OnlineStudyManage-->
+<!--@File: signup.py-->
+<!--@Time: 2022/6/2216:30-->
+<!--@Software: PyCharm-->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注 册</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap@5.2.0-beta1.min.css' %}">
+</head>
+<body>
+<div class="row mt-5">
+    <div class="col"></div>
+    <div class="col shadow p-3 mb-5 bg-body rounded">
+        <form method="post" novalidate>
+            <img class="rounded mx-auto d-block" src="{% static 'img/logo.png' %}" alt="" width="100" height="100">
+            <h1 class="h3 mx-auto fw-normal text-center" style="margin-top: 10px">教学管理平台</h1>
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-floating">
+                    {{ field }}
+                    <label>{{ field.label }}</label>
+                    <span style="color:red">{{ field.errors.0 }}</span>
+                </div>
+            {% endfor %}
+            {#图片验证码#}
+            <div class="row">
+                <div class="col-8">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="captcha_code" id="captcha_code" placeholder="验证码">
+                        <label>验证码</label>
+                        <span style="color:red">{{ captcha_error }}</span>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <img id="captcha" src="/captcha/{{ uuid }}" class="img-fluid" style="margin-top: 5px">
+                </div>
+            </div>
+
+            <button class="w-100 btn btn-lg btn-dark" type="submit" style="margin-top: 10px">注 册</button>
+        </form>
+        <button class="w-100 btn btn-lg btn-light" id="btnSignin">登 录</button>
+
+    </div>
+
+    <div class="col"></div>
+
+</div>
+<script src="{% static 'js/bootstrap@5.2.0-beta1.bundle.min.js' %}"></script>
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script type="text/javascript">
+    $(function () {
+        bindBtnSigninEvent();
+    })
+
+    function bindBtnSigninEvent() {
+        $("#btnSignin").click(function () {
+            // 点击登录按钮跳转
+            window.location.href = "/signin/"
+        })
+    }
+</script>
+</body>
+</html>
